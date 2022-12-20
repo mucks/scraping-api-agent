@@ -1,11 +1,12 @@
 version: "3"
 
 services:
-  playwright-behind-vpn:
+  scraping-api-agent:
     build: ./
-    image: ${REGISTRY_URL}/playwright-behind-vpn
+    image: mucks/scraping-api-agent
     cap_add:
       - NET_ADMIN
+      - SYS_ADMIN
     environment:
       #PROVIDER: ${PROVIDER}
       SURFSHARK_USER: ${SURFSHARK_USER}
@@ -17,7 +18,6 @@ services:
   #enter curl container via "docker exec -it" and check ip via "curl ifconfig.me"
   nginx:
     build: ./nginx
-    image: ${REGISTRY_URL}/playwright-behind-vpn-nginx
     ports:
       - "4000:80"
     networks:

@@ -1,7 +1,14 @@
-FROM mcr.microsoft.com/playwright:v1.29.0-focal
+FROM zenika/alpine-chrome:with-playwright
 
-RUN apt update -y && apt upgrade -y
-RUN apt install -y openvpn
+USER root
+
+RUN apk update && apk upgrade
+RUN apk add openvpn sudo
+RUN addgroup sudo
+RUN addgroup chrome sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER chrome
 
 WORKDIR /app
 

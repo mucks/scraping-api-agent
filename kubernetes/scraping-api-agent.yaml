@@ -16,5 +16,7 @@ spec:
         limits:
           memory: "300Mi"
           cpu: "100m"
-      ports:
-        - containerPort: 4000
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN

@@ -3,11 +3,12 @@ import { spawn } from "child_process"
 export class OpenVpn {
   static async connect(vpn: string): Promise<void> {
     const complete = "Initialization Sequence Completed";
-    const openvpn = spawn("openvpn", [vpn]);
+    const openvpn = spawn("sudo", ["openvpn", vpn]);
 
     return new Promise((resolve, reject) => {
       openvpn.stdout.on('data', (data) => {
         const s = data.toString();
+        console.log(s);
         if (s.includes(complete)) {
           resolve();
         }

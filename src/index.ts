@@ -60,7 +60,7 @@ app.post('/scrape', async (req, res) => {
     let browser = null;
 
     try {
-      browser = await chromium.launch();
+      browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
       console.log('chromium launched');
       const context = await browser.newContext({ userAgent: USER_AGENT });
       const page = await context.newPage();
