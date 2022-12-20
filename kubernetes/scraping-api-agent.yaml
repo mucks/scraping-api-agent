@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: scraping-api-agent
+  namespace: scraping-api
+  labels:
+    name: scraping-api-agent
+spec:
+  containers:
+    - name: scraping-api-agent
+      image: mucks/scraping-api-agent
+      envFrom:
+        - secretRef:
+            name: scraping-api-agent-secret
+      resources:
+        limits:
+          memory: "300Mi"
+          cpu: "100m"
+      ports:
+        - containerPort: 4000

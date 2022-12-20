@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: undetected_chromedriver
+  namespace: scraping-api
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: undected-chromedriver
+  template:
+    metadata:
+      labels:
+        app: undetected-chromedriver
+  template:
+    spec:
+      containers:
+      - image: openvpn-client-rs
+        name: openvpn-client
+        envFrom:
+        - secretRef:
+            name: openvpn-client-secret
+      - image: undetected-chromedriver
+        name: undetected-chromedriver
+        env:
+        - name: OPENVPN_CLIENT_URL
+          value: "http://localhost:8080"
+  
+
+
+
+

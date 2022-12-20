@@ -1,0 +1,6 @@
+tmp
+openvpn
+node_modules
+yarn.lock
+.env
+*secret.yaml
