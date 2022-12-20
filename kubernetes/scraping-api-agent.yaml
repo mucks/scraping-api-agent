@@ -8,15 +8,26 @@ metadata:
 spec:
   containers:
     - name: scraping-api-agent
-      image: mucks/scraping-api-agent
-      envFrom:
-        - secretRef:
-            name: scraping-api-agent-secret
-      resources:
-        limits:
-          memory: "300Mi"
-          cpu: "100m"
+      image: mucks/scraping-api-agent:0.1-beta-alpine
+      env:
+        - name: SURFSHARK_USER
+          valueFrom:
+            configMapKeyRef:
+              name: scraping-api-agent-config-secret
+              key: SURFSHARK_USER
+        - name: SURFSHARK_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: scraping-api-agent-config-secret
+              key: SURFSHARK_PASSWORD
+      # resources:
+      #   limits:
+      #     memory: "300Mi"
+      #     cpu: "100m"
+      ports:
+        - containerPort: 4000
       securityContext:
         capabilities:
           add:
             - NET_ADMIN
+            - SYS_ADMIN
