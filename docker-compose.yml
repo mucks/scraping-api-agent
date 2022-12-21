@@ -6,7 +6,6 @@ services:
     image: mucks/scraping-api-agent:latest
     cap_add:
       - NET_ADMIN
-      - SYS_ADMIN
     environment:
       #PROVIDER: ${PROVIDER}
       SURFSHARK_USER: ${SURFSHARK_USER}

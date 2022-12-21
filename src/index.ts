@@ -1,14 +1,12 @@
 import { OpenVpn } from "./openvpn"
 import { VpnPool } from "./vpn/VpnPool"
 import express from 'express';
-import axios from "axios";
-import { Browser, chromium } from "playwright-chromium";
 import { createDirs } from "./util";
-import { PRODUCTION, USER_AGENT, USE_VPN } from "./config";
+import { USE_VPN } from "./config";
 import scrape_js from "./scrape_js";
 import scrape from "./scrape";
+import { state } from "./state";
 
-let browser: Browser | undefined;
 
 const app = express();
 app.use(express.json());
@@ -18,6 +16,8 @@ app.use(express.json());
 (async () => {
   require('dotenv').config()
   createDirs();
+
+  state.setBusy();
 
   if (USE_VPN) {
     await VpnPool.init();
@@ -31,16 +31,26 @@ app.use(express.json());
     await scrape(req, res);
   });
 
-  // always keep browser running
-  browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, headless: PRODUCTION });
   // scrape with playwright
   app.post('/scrape-js', async (req, res) => {
-    scrape_js(req, res, browser);
+    await scrape_js(req, res);
+  });
+
+  // check if the server is currently busy
+  app.get('/is-busy', async (req, res) => {
+    res.send('' + state.isBusy());
+  });
+
+  //shutdown the server / container
+  app.delete('/shutdown', async (req, res) => {
+    res.send('Shutting down');
+    process.exit(0);
   });
 
   const port = 4000;
 
   app.listen(port, () => {
+    state.setNotBusy();
     console.log(`listening on port ${port}`);
   });
 

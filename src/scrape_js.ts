@@ -1,12 +1,19 @@
 import { Request, Response } from "express";
-import { Browser } from "playwright-chromium";
+import { chromium } from "playwright-chromium";
 import { USER_AGENT } from "./config";
+import { state } from "./state";
 
-export default async (req: Request, res: Response, browser?: Browser) => {
+export default async (req: Request, res: Response) => {
+  if (state.isBusy()) {
+    res.status(500).send('Server is busy');
+    return;
+  }
+
   let url = '';
   let waitMs = 0;
 
   try {
+
     url = req.body.url;
     waitMs = req.body.waitMs || 0;
   } catch (e) {
@@ -14,13 +21,11 @@ export default async (req: Request, res: Response, browser?: Browser) => {
     return;
   }
 
+  let browser = undefined;
+  state.setBusy();
 
   try {
-    console.log('chromium launched');
-    if (!browser) {
-      throw new Error('Browser not initialized');
-    }
-
+    browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
     const context = await browser.newContext({ userAgent: USER_AGENT });
     const page = await context.newPage();
 
@@ -37,13 +42,18 @@ export default async (req: Request, res: Response, browser?: Browser) => {
     const html = await page.content();
     await page.close();
     await context.close();
-    //await browser.close();
+    await browser.close();
+
+    state.setNotBusy();
 
     res.send(html);
   } catch (e) {
     if (browser) {
       await browser.close();
     }
+
+    state.setNotBusy();
+
     res.status(500).send(e);
   }
 }
