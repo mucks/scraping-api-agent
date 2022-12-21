@@ -12,7 +12,7 @@ spec:
       - 1.0.0.1
   containers:
     - name: scraping-api-agent
-      image: mucks/scraping-api-agent:master
+      image: mucks/scraping-api-agent:latest
       env:
         - name: SURFSHARK_USER
           valueFrom:
