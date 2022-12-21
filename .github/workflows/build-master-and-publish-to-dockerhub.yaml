@@ -29,5 +29,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: latest
+          tags: alpine, latest
           labels: ${{ steps.meta.outputs.labels }}
