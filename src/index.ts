@@ -1,11 +1,11 @@
-import { OpenVpn } from "./openvpn"
-import { VpnPool } from "./vpn/VpnPool"
+import { OpenVpn } from "./vpn/openvpn"
 import express from 'express';
 import { createDirs } from "./util";
 import { USE_VPN } from "./config";
 import scrape_js from "./scrape_js";
 import scrape from "./scrape";
 import { state } from "./state";
+import { Provider } from "./vpn/provider/Provider";
 
 
 const app = express();
@@ -14,16 +14,17 @@ app.use(express.json());
 
 //main
 (async () => {
-  require('dotenv').config()
   createDirs();
 
   state.setBusy();
 
+  const vpnProvider = new Provider();
+  await vpnProvider.init();
+  const vpn = vpnProvider.get_random_vpn();
+
   if (USE_VPN) {
-    await VpnPool.init();
-    let vpn = VpnPool.get_random_vpn();
     await OpenVpn.connect(vpn);
-    console.log('connected');
+    console.log('connected to vpn: ${vpn}');
   }
 
   // scrape with axios

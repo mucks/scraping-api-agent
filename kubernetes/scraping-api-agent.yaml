@@ -5,6 +5,7 @@ metadata:
   namespace: scraping-api
   labels:
     name: scraping-api-agent
+    app: scraping-api-agent
 spec:
   dnsConfig:
     nameservers:
@@ -28,8 +29,6 @@ spec:
         limits:
           memory: "512Mi"
           cpu: "250m"
-      ports:
-        - containerPort: 4000
       securityContext:
         capabilities:
           add:

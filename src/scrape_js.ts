@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { chromium } from "playwright-chromium";
-import { USER_AGENT } from "./config";
+import { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, USER_AGENT } from "./config";
 import { state } from "./state";
 
 export default async (req: Request, res: Response) => {
@@ -25,7 +25,7 @@ export default async (req: Request, res: Response) => {
   state.setBusy();
 
   try {
-    browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
+    browser = await chromium.launch({ executablePath: PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
     const context = await browser.newContext({ userAgent: USER_AGENT });
     const page = await context.newPage();
 

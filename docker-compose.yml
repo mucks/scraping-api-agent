@@ -3,7 +3,7 @@ version: "3"
 services:
   scraping-api-agent:
     build: ./
-    image: mucks/scraping-api-agent:latest
+    #image: mucks/scraping-api-agent:latest
     cap_add:
       - NET_ADMIN
     environment:
@@ -17,6 +17,7 @@ services:
   #enter curl container via "docker exec -it" and check ip via "curl ifconfig.me"
   nginx:
     build: ./nginx
+    image: mucks/scraping-api-agent-nginx:latest
     ports:
       - "4000:80"
     networks:
