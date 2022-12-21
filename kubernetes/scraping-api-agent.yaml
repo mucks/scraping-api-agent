@@ -6,6 +6,10 @@ metadata:
   labels:
     name: scraping-api-agent
 spec:
+  dnsConfig:
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
   containers:
     - name: scraping-api-agent
       image: mucks/scraping-api-agent:0.1-beta-alpine
@@ -20,10 +24,10 @@ spec:
             configMapKeyRef:
               name: scraping-api-agent-config-secret
               key: SURFSHARK_PASSWORD
-      # resources:
-      #   limits:
-      #     memory: "300Mi"
-      #     cpu: "100m"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "250m"
       ports:
         - containerPort: 4000
       securityContext:
