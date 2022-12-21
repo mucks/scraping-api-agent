@@ -29,5 +29,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: alpine, latest
+          tags: mucks/scraping-api-agent:latest
           labels: ${{ steps.meta.outputs.labels }}
