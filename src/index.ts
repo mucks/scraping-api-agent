@@ -6,6 +6,7 @@ import { chromium } from "playwright-chromium";
 import { createDirs } from "./util";
 
 const USE_VPN = process.env.USE_VPN;
+const PRODUCTION = process.env.PRODUCTION == 'true';
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
 const app = express();
@@ -60,10 +61,19 @@ app.post('/scrape', async (req, res) => {
     let browser = null;
 
     try {
-      browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
+      browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, headless: PRODUCTION });
       console.log('chromium launched');
       const context = await browser.newContext({ userAgent: USER_AGENT });
       const page = await context.newPage();
+
+      // Disable images, css, fonts, etc.
+      const RESOURCE_EXCLUSTIONS = ['image', 'stylesheet', 'media', 'font', 'other'];
+      await page.route('**/*', (route) => {
+        return RESOURCE_EXCLUSTIONS.includes(route.request().resourceType())
+          ? route.abort()
+          : route.continue()
+      });
+
       await page.goto(url);
       await page.waitForTimeout(waitMs);
       const html = await page.content();

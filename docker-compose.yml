@@ -3,7 +3,7 @@ version: "3"
 services:
   scraping-api-agent:
     build: ./
-    image: mucks/scraping-api-agent
+    image: mucks/scraping-api-agent:latest
     cap_add:
       - NET_ADMIN
       - SYS_ADMIN
