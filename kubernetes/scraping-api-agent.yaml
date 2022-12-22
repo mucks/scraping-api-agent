@@ -4,7 +4,6 @@ metadata:
   name: scraping-api-agent
   namespace: scraping-api
   labels:
-    name: scraping-api-agent
     app: scraping-api-agent
 spec:
   dnsConfig:
@@ -27,11 +26,18 @@ spec:
             secretKeyRef:
               name: scraping-api-agent-secret
               key: VPN_PROVIDER_PASSWORD
+      volumeMounts:
+        - mountPath: /app/openvpn
+          name: scraping-api-agent-volume
       resources:
         limits:
           memory: "512Mi"
-          cpu: "250m"
+          cpu: "350m"
       securityContext:
         capabilities:
           add:
             - NET_ADMIN
+  volumes:
+    - name: scraping-api-agent-volume
+      persistentVolumeClaim:
+        claimName: scraping-api-agent-pvc
