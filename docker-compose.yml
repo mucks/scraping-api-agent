@@ -7,17 +7,14 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      #PROVIDER: ${PROVIDER}
-      SURFSHARK_USER: ${SURFSHARK_USER}
-      SURFSHARK_PASSWORD: ${SURFSHARK_PASSWORD}
-      PUREVPN_USER: ${PUREVPN_USER}
-      PUREVPN_PASSWORD: ${PUREVPN_PASSWORD}
+      VPN_PROVIDER: ${VPN_PROVIDER}
+      VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
+      VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
     networks:
       - default
   #enter curl container via "docker exec -it" and check ip via "curl ifconfig.me"
   nginx:
     build: ./nginx
-    image: mucks/scraping-api-agent-nginx:latest
     ports:
       - "4000:80"
     networks:

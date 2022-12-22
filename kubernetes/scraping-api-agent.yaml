@@ -15,16 +15,18 @@ spec:
     - name: scraping-api-agent
       image: mucks/scraping-api-agent:latest
       env:
-        - name: SURFSHARK_USER
+        - name: VPN_PROVIDER
+          value: surfshark
+        - name: VPN_PROVIDER_USERNAME
           valueFrom:
-            configMapKeyRef:
-              name: scraping-api-agent-config-secret
-              key: SURFSHARK_USER
-        - name: SURFSHARK_PASSWORD
+            secretKeyRef:
+              name: scraping-api-agent-secret
+              key: VPN_PROVIDER_USERNAME
+        - name: VPN_PROVIDER_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: scraping-api-agent-config-secret
-              key: SURFSHARK_PASSWORD
+            secretKeyRef:
+              name: scraping-api-agent-secret
+              key: VPN_PROVIDER_PASSWORD
       resources:
         limits:
           memory: "512Mi"

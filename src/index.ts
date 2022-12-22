@@ -24,7 +24,7 @@ app.use(express.json());
 
   if (USE_VPN) {
     await OpenVpn.connect(vpn);
-    console.log('connected to vpn: ${vpn}');
+    console.log(`connected to vpn: ${vpn}`);
   }
 
   // scrape with axios

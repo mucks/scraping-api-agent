@@ -6,10 +6,12 @@ and exposes Rest endpoints to use for scraping websites.
 ## Supported vpn Providers
 
 * surfshark
+* purevpn
+* nordvpn
 
 
 ## ROADMAP
 
-* support purevpn, nordvpn etc
-* add envs to filter vpn by country, city, provider
-* add api route to shutdown server, so kubernetes or docker can restart it with new vpn
+- [x] support purevpn, nordvpn etc
+- [x] add api route to shutdown server, so kubernetes or docker can restart it with new vpn
+* add envs to filter vpn by country, city
