@@ -1,28 +1,11 @@
 import { Request, Response } from "express";
 import { chromium } from "playwright-chromium";
 import { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, USER_AGENT } from "./config";
-import { state } from "./state";
+import { busyCheck, state } from "./state";
+import { urlCheck } from "./util";
 
-export default async (req: Request, res: Response) => {
-  if (state.isBusy()) {
-    res.status(500).send('Server is busy');
-    return;
-  }
-
-  let url = '';
-  let waitMs = 0;
-
-  try {
-
-    url = req.body.url;
-    waitMs = req.body.waitMs || 0;
-  } catch (e) {
-    res.status(401).send('Missing url');
-    return;
-  }
-
+export const scrapeJs = async (url: string, waitMs: number) => {
   let browser = undefined;
-  state.setBusy();
 
   try {
     browser = await chromium.launch({ executablePath: PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
@@ -44,16 +27,34 @@ export default async (req: Request, res: Response) => {
     await context.close();
     await browser.close();
 
-    state.setNotBusy();
-
-    res.send(html);
+    return html;
   } catch (e) {
     if (browser) {
       await browser.close();
     }
+    throw e;
 
+  }
+
+}
+
+export const apiScrapeJs = async (req: Request, res: Response) => {
+  busyCheck(res);
+
+  const url = urlCheck(req, res);
+  const waitMs = req.body.waitMs || 0;
+
+  try {
+
+    state.setBusy();
+    const html = await scrapeJs(url, waitMs);
     state.setNotBusy();
 
+    res.send(html);
+  } catch (e) {
+    state.setNotBusy();
     res.status(500).send(e);
   }
+
+
 }

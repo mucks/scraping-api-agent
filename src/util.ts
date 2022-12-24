@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import fs from 'fs';
 
 export const createDirs = () => {
@@ -8,3 +9,13 @@ export const createDirs = () => {
     fs.mkdirSync("./tmp")
   }
 }
+
+export const urlCheck = (req: Request, res: Response): string => {
+  try {
+    const url = req.body.url;
+    return url;
+  } catch (e) {
+    console.log(e);
+    res.status(401).send('Missing url');
+  }
+};

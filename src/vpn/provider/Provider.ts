@@ -12,16 +12,16 @@ export class Provider {
   async init() {
     switch (VPN_PROVIDER) {
       case 'surfshark':
-        await Surfshark.init();
-        this.configs = Surfshark.getConfigs();
+        await Surfshark.init('./openvpn/surfshark');
+        this.configs = Surfshark.getConfigs('./openvpn/surfshark');
         break;
       case 'purevpn':
-        await PureVpn.init();
-        this.configs = PureVpn.getConfigs();
+        await PureVpn.init('./openvpn/purevpn');
+        this.configs = PureVpn.getConfigs('./openvpn/purevpn');
         break;
       case 'nordvpn':
-        await NordVpn.init();
-        this.configs = NordVpn.getConfigs();
+        await NordVpn.init('./openvpn/nordvpn');
+        this.configs = NordVpn.getConfigs('./openvpn/nordvpn');
         break;
     }
   }
@@ -32,14 +32,14 @@ export class Provider {
   }
 
 
-  static async downloadConfigs(PATH: string, url: string) {
-    fs.mkdirSync(PATH);
+  static async downloadConfigs(path: string, url: string) {
+    fs.mkdirSync(path, { recursive: true });
     const resp = await axios.get(url, { responseType: 'arraybuffer' });
 
-    const tmpFilePath = './tmp/download.zip';
+    const tmpFilePath = `${path}/download.zip`;
 
     fs.writeFileSync(tmpFilePath, resp.data);
-    await decompress(tmpFilePath, PATH);
+    await decompress(tmpFilePath, path);
     fs.unlinkSync(tmpFilePath);
   }
 

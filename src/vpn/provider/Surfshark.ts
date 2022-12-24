@@ -1,22 +1,21 @@
 import { Provider } from './Provider';
 
-const PATH = './openvpn/surfshark';
 
 export class Surfshark {
-  static async downloadConfigs() {
+  static async downloadConfigs(path: string) {
     const url = "https://my.surfshark.com/vpn/api/v1/server/configurations";
-    await Provider.downloadConfigs(PATH, url);
+    await Provider.downloadConfigs(path, url);
   }
 
-  static async init() {
-    if (Provider.isEmpty(PATH)) {
-      await this.downloadConfigs();
-      Provider.addAuthTxtPathToConfigs(PATH);
+  static async init(path: string) {
+    if (Provider.isEmpty(path)) {
+      await this.downloadConfigs(path);
+      Provider.addAuthTxtPathToConfigs(path);
     }
-    Provider.createAuthTxtFromEnv(PATH);
+    Provider.createAuthTxtFromEnv(path);
   }
 
-  static getConfigs() {
-    return Provider.getConfigs(PATH);
+  static getConfigs(path: string) {
+    return Provider.getConfigs(path);
   }
 }

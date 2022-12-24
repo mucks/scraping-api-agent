@@ -1,30 +1,32 @@
 import axios from "axios";
 import { Request, Response } from "express";
 import { USER_AGENT } from "./config";
-import { state } from "./state";
+import { busyCheck, state } from "./state";
+import { urlCheck } from "./util";
 
-export default async (req: Request, res: Response) => {
-  if (state.isBusy()) {
-    res.status(500).send('Server is busy');
-    return;
-  }
 
-  let url = '';
-  try {
-    url = req.body.url;
-  } catch (e) {
-    console.log(e);
-    res.status(401).send('Missing url');
-    return;
-  }
+export const scrape = async (url: string) => {
+  const headers = {
+    'User-Agent': USER_AGENT,
+    'Accept-Encoding': 'html'
+  };
+  const resp = await axios.get(url, { headers });
+  return resp.data;
+};
+
+export const apiScrape = async (req: Request, res: Response) => {
+  busyCheck(res);
+
+  const url = urlCheck(req, res);
 
   try {
     state.setBusy();
-    console.log(url);
-    const resp = await axios.get(url, { headers: { 'User-Agent': USER_AGENT } });
+
+    const data = await scrape(url);
+
     state.setNotBusy();
 
-    res.send(resp.data);
+    res.send(data);
   } catch (e) {
     state.setNotBusy();
 

@@ -1,3 +1,4 @@
+import { Response } from "express";
 
 class State {
   private _isBusy: boolean = false
@@ -14,3 +15,10 @@ class State {
 }
 
 export const state = new State();
+
+export const busyCheck = (res: Response) => {
+  if (state.isBusy()) {
+    res.status(500).send('Server is busy');
+    return;
+  }
+};

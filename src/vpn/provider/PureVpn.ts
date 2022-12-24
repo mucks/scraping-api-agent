@@ -1,36 +1,34 @@
 import { Provider } from './Provider';
 import fs from 'fs';
 
-const PATH = './openvpn/purevpn';
-
 export class PureVpn {
-  private static async downloadConfigs() {
+  private static async downloadConfigs(path: string) {
     const url = "https://d32d3g1fvkpl8y.cloudfront.net/heartbleed/windows/New+OVPN+Files.zip";
-    await Provider.downloadConfigs(PATH, url);
+    await Provider.downloadConfigs(path, url);
   }
 
-  private static moveFiles() {
+  private static moveFiles(path: string) {
     const zipName = "New+OVPN+Files";
-    const tcpPath = `${PATH}/${zipName}/TCP`;
-    const udpPath = `${PATH}/${zipName}/UDP`;
+    const tcpPath = `${path}/${zipName}/TCP`;
+    const udpPath = `${path}/${zipName}/UDP`;
 
-    Provider.moveAllOvpnFiles(tcpPath, PATH);
-    Provider.moveAllOvpnFiles(udpPath, PATH);
+    Provider.moveAllOvpnFiles(tcpPath, path);
+    Provider.moveAllOvpnFiles(udpPath, path);
 
-    fs.rmSync(`${PATH}/${zipName}`, { recursive: true });
+    fs.rmSync(`${path}/${zipName}`, { recursive: true });
   }
 
 
-  static async init() {
-    if (Provider.isEmpty(PATH)) {
-      await this.downloadConfigs();
-      this.moveFiles();
-      Provider.addAuthTxtPathToConfigs(PATH);
+  static async init(path: string) {
+    if (Provider.isEmpty(path)) {
+      await this.downloadConfigs(path);
+      this.moveFiles(path);
+      Provider.addAuthTxtPathToConfigs(path);
     }
-    Provider.createAuthTxtFromEnv(PATH);
+    Provider.createAuthTxtFromEnv(path);
   }
 
-  static getConfigs() {
-    return Provider.getConfigs(PATH);
+  static getConfigs(path: string) {
+    return Provider.getConfigs(path);
   }
 }

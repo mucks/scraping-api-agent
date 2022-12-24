@@ -2,10 +2,10 @@ import { OpenVpn } from "./vpn/openvpn"
 import express from 'express';
 import { createDirs } from "./util";
 import { USE_VPN } from "./config";
-import scrape_js from "./scrape_js";
-import scrape from "./scrape";
 import { state } from "./state";
 import { Provider } from "./vpn/provider/Provider";
+import { apiScrape } from "./scrape";
+import { apiScrapeJs } from "./scrape_js";
 
 
 const app = express();
@@ -29,12 +29,12 @@ app.use(express.json());
 
   // scrape with axios
   app.post('/scrape', async (req, res) => {
-    await scrape(req, res);
+    await apiScrape(req, res);
   });
 
   // scrape with playwright
   app.post('/scrape-js', async (req, res) => {
-    await scrape_js(req, res);
+    await apiScrapeJs(req, res);
   });
 
   // check if the server is currently busy

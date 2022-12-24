@@ -1,21 +1,39 @@
 version: "3"
 
 services:
-  scraping-api-agent:
+  scraping-api-agent-1:
     build: ./
-    #image: mucks/scraping-api-agent:latest
     cap_add:
       - NET_ADMIN
     environment:
       VPN_PROVIDER: ${VPN_PROVIDER}
       VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
       VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
+    ports:
+      - "4001:4000"
     networks:
       - default
-  #enter curl container via "docker exec -it" and check ip via "curl ifconfig.me"
-  nginx:
-    build: ./nginx
+  scraping-api-agent-2:
+    build: ./
+    cap_add:
+      - NET_ADMIN
+    environment:
+      VPN_PROVIDER: ${VPN_PROVIDER}
+      VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
+      VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
     ports:
-      - "4000:80"
+      - "4002:4000"
+    networks:
+      - default
+  scraping-api-agent-3:
+    build: ./
+    cap_add:
+      - NET_ADMIN
+    environment:
+      VPN_PROVIDER: ${VPN_PROVIDER}
+      VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
+      VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
+    ports:
+      - "4003:4000"
     networks:
       - default

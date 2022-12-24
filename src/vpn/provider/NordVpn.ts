@@ -1,36 +1,34 @@
 import { Provider } from './Provider';
 import fs from 'fs';
 
-const PATH = './openvpn/nordvpn';
-
 export class NordVpn {
-  private static async downloadConfigs() {
+  private static async downloadConfigs(path: string) {
     const url = "https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip";
-    await Provider.downloadConfigs(PATH, url);
+    await Provider.downloadConfigs(path, url);
   }
 
-  private static moveFiles() {
-    const tcpPath = `${PATH}/ovpn_tcp`;
-    const udpPath = `${PATH}/ovpn_udp`;
+  private static moveFiles(path: string) {
+    const tcpPath = `${path}/ovpn_tcp`;
+    const udpPath = `${path}/ovpn_udp`;
 
-    Provider.moveAllOvpnFiles(tcpPath, PATH);
-    Provider.moveAllOvpnFiles(udpPath, PATH);
+    Provider.moveAllOvpnFiles(tcpPath, path);
+    Provider.moveAllOvpnFiles(udpPath, path);
 
     fs.rmSync(tcpPath, { recursive: true });
     fs.rmSync(udpPath, { recursive: true });
   }
 
 
-  static async init() {
-    if (Provider.isEmpty(PATH)) {
-      await this.downloadConfigs();
-      this.moveFiles();
-      Provider.addAuthTxtPathToConfigs(PATH);
+  static async init(path: string) {
+    if (Provider.isEmpty(path)) {
+      await this.downloadConfigs(path);
+      this.moveFiles(path);
+      Provider.addAuthTxtPathToConfigs(path);
     }
-    Provider.createAuthTxtFromEnv(PATH);
+    Provider.createAuthTxtFromEnv(path);
   }
 
-  static getConfigs() {
-    return Provider.getConfigs(PATH);
+  static getConfigs(path: string) {
+    return Provider.getConfigs(path);
   }
 }

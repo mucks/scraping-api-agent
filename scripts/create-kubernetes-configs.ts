@@ -9,18 +9,19 @@ fs.mkdirSync('./kubernetes/generated');
 
 //surfshark
 for (let i = 0; i < 10; i++) {
+  const count = i + 1;
   //service
-  service.metadata.name = `scraping-api-agent-surfshark-service-${i}`;
-  service.spec.selector.app = `scraping-api-agent-surfshark-${i}`;
-  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-service-${i}.yaml`, yaml.dump(service));
+  service.metadata.name = `scraping-api-agent-surfshark-service-${count}`;
+  service.spec.selector.app = `scraping-api-agent-surfshark-${count}`;
+  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-service-${count}.yaml`, yaml.dump(service));
   //pvc
-  pvc.metadata.name = `scraping-api-agent-surfshark-pvc-${i}`;
-  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-pvc-${i}.yaml`, yaml.dump(pvc));
+  pvc.metadata.name = `scraping-api-agent-surfshark-pvc-${count}`;
+  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-pvc-${count}.yaml`, yaml.dump(pvc));
   //pod
-  pod.metadata.name = `scraping-api-agent-surfshark-${i}`;
-  pod.metadata.labels.app = `scraping-api-agent-surfshark-${i}`;
-  pod.spec.volumes[0].persistentVolumeClaim.claimName = `scraping-api-agent-surfshark-pvc-${i}`;
-  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-${i}.yaml`, yaml.dump(pod));
+  pod.metadata.name = `scraping-api-agent-surfshark-${count}`;
+  pod.metadata.labels.app = `scraping-api-agent-surfshark-${count}`;
+  pod.spec.volumes[0].persistentVolumeClaim.claimName = `scraping-api-agent-surfshark-pvc-${count}`;
+  fs.writeFileSync(`./kubernetes/generated/scraping-api-agent-surfshark-${count}.yaml`, yaml.dump(pod));
 }
 
 
