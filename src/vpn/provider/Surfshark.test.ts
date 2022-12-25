@@ -25,7 +25,8 @@ test('surfshark-register-wireguard', async () => {
 
 test('surfshark-download-configs', async () => {
   const creds = Surfshark.generate_wireguard(path);
-  const data = await Surfshark.downloadWireguardConfigs(path, creds.privKey);
+  await Surfshark.downloadWireguardConfigs(path, creds.privKey);
+  rmSync(path, { recursive: true });
 });
 
 // test('Surfshark config download and extraction', async () => {

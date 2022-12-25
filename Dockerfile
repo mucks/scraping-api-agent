@@ -17,7 +17,7 @@ FROM zenika/alpine-chrome:with-playwright
 
 USER root
 
-RUN apk add --no-cache openvpn sudo
+RUN apk add --no-cache openvpn wireguard-tools ip6tables sudo
 RUN addgroup sudo
 RUN addgroup chrome sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers

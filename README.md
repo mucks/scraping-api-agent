@@ -14,4 +14,6 @@ and exposes Rest endpoints to use for scraping websites.
 
 - [x] support purevpn, nordvpn etc
 - [x] add api route to shutdown server, so kubernetes or docker can restart it with new vpn
-* add envs to filter vpn by country, city
+- [x] add envs to filter vpn by country
+- [ ] add envs to filter vpn by city
+- [ ] fix wireguard support

@@ -5,38 +5,52 @@ services:
     build: ./
     cap_add:
       - NET_ADMIN
+      # wireguard
+      #- SYS_MODULE
+      #wireguard
+      #sysctls:
+      #  - net.ipv4.conf.all.src_valid_mark=1
+      #wireguard
+      #privileged: true
+
     environment:
       VPN_PROVIDER: ${VPN_PROVIDER}
+      VPN_FILTER: ${VPN_FILTER}
+      VPN_PROTOCOL: ${VPN_PROTOCOL}
       VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
       VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
     restart: always
+    volumes:
+      - /lib/modules:/lib/modules
     ports:
       - "4001:4000"
     networks:
       - default
-  scraping-api-agent-2:
-    build: ./
-    cap_add:
-      - NET_ADMIN
-    restart: always
-    environment:
-      VPN_PROVIDER: ${VPN_PROVIDER}
-      VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
-      VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
-    ports:
-      - "4002:4000"
-    networks:
-      - default
-  scraping-api-agent-3:
-    build: ./
-    cap_add:
-      - NET_ADMIN
-    restart: always
-    environment:
-      VPN_PROVIDER: ${VPN_PROVIDER}
-      VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
-      VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
-    ports:
-      - "4003:4000"
-    networks:
-      - default
+  # scraping-api-agent-2:
+  #   build: ./
+  #   cap_add:
+  #     - NET_ADMIN
+  #   restart: always
+  #   environment:
+  #     VPN_PROVIDER: ${VPN_PROVIDER}
+  #     VPN_PROTOCOL: ${VPN_PROTOCOL}
+  #     VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
+  #     VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
+  #   ports:
+  #     - "4002:4000"
+  #   networks:
+  #     - default
+  # scraping-api-agent-3:
+  #   build: ./
+  #   cap_add:
+  #     - NET_ADMIN
+  #   restart: always
+  #   environment:
+  #     VPN_PROVIDER: ${VPN_PROVIDER}
+  #     VPN_PROTOCOL: ${VPN_PROTOCOL}
+  #     VPN_PROVIDER_USERNAME: ${VPN_PROVIDER_USERNAME}
+  #     VPN_PROVIDER_PASSWORD: ${VPN_PROVIDER_PASSWORD}
+  #   ports:
+  #     - "4003:4000"
+  #   networks:
+  #     - default

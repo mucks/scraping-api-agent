@@ -9,9 +9,15 @@ export const PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH = process.env.PLAYWRIGHT_CHROMI
 export const VPN_PROVIDER = process.env.VPN_PROVIDER;
 export const VPN_PROVIDER_USERNAME = process.env.VPN_PROVIDER_USERNAME;
 export const VPN_PROVIDER_PASSWORD = process.env.VPN_PROVIDER_PASSWORD;
+export const VPN_PROTOCOL = process.env.VPN_PROTOCOL;
+export const VPN_FILTER = process.env.VPN_FILTER;
 
 if (!VPN_PROVIDER) {
   throw 'VPN_PROVIDER is not set';
+}
+
+if (!VPN_PROTOCOL) {
+  throw 'VPN_PROTOCOL is not set';
 }
 
 if (!VPN_PROVIDER_USERNAME) {

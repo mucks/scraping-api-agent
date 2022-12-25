@@ -1,13 +1,12 @@
-import { OpenVpn } from "./vpn/openvpn"
+import { OpenVpn } from "./vpn/OpenVpn"
 import express from 'express';
 import { createDirs } from "./util";
-import { USE_VPN } from "./config";
+import { USE_VPN, VPN_PROTOCOL } from "./config";
 import { state } from "./state";
 import { Provider } from "./vpn/provider/Provider";
 import { apiScrape } from "./scrape";
 import { apiScrapeJs } from "./scrape_js";
-import { Surfshark } from "./vpn/provider/Surfshark";
-import { writeFileSync } from "fs";
+import { WireGuard } from "./vpn/WireGuard";
 
 const app = express();
 app.use(express.json());
@@ -17,13 +16,26 @@ async function main() {
 
   state.setBusy();
 
-  const vpnProvider = new Provider();
-  await vpnProvider.init();
-  const vpn = vpnProvider.get_random_vpn();
+
 
   if (USE_VPN) {
-    await OpenVpn.connect(vpn);
-    console.log(`connected to vpn: ${vpn}`);
+    try {
+      const vpnProvider = new Provider();
+      await vpnProvider.init();
+      const vpn = vpnProvider.get_random_vpn();
+      switch (VPN_PROTOCOL) {
+        case 'openvpn':
+          await OpenVpn.connect(vpn);
+          break;
+        case 'wireguard':
+          await WireGuard.connect(vpn);
+          break;
+      }
+      console.log(`connected to vpn: ${vpn}`);
+    } catch (e) {
+      console.error(e);
+      return;
+    }
   }
 
   // scrape with axios
@@ -56,5 +68,5 @@ async function main() {
 }
 
 (async () => {
-  //await main();
+  await main();
 })()

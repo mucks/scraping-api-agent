@@ -27,7 +27,7 @@ spec:
               name: scraping-api-agent-secret
               key: VPN_PROVIDER_PASSWORD
       volumeMounts:
-        - mountPath: /app/openvpn
+        - mountPath: /app/vpn_configs
           name: scraping-api-agent-volume
       securityContext:
         capabilities:
