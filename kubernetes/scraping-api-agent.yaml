@@ -29,10 +29,6 @@ spec:
       volumeMounts:
         - mountPath: /app/openvpn
           name: scraping-api-agent-volume
-      resources:
-        limits:
-          memory: "512Mi"
-          cpu: "350m"
       securityContext:
         capabilities:
           add:

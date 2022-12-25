@@ -6,14 +6,13 @@ import { state } from "./state";
 import { Provider } from "./vpn/provider/Provider";
 import { apiScrape } from "./scrape";
 import { apiScrapeJs } from "./scrape_js";
-
+import { Surfshark } from "./vpn/provider/Surfshark";
+import { writeFileSync } from "fs";
 
 const app = express();
 app.use(express.json());
 
-
-//main
-(async () => {
+async function main() {
   createDirs();
 
   state.setBusy();
@@ -54,5 +53,8 @@ app.use(express.json());
     state.setNotBusy();
     console.log(`listening on port ${port}`);
   });
+}
 
+(async () => {
+  //await main();
 })()
