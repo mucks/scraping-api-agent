@@ -38,6 +38,8 @@ async function main() {
     }
   }
 
+  await state.createBrowser();
+
   // scrape with axios
   app.post('/scrape', async (req, res) => {
     await apiScrape(req, res);

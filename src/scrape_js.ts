@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import { chromium } from "playwright-chromium";
+import { Browser, chromium } from "playwright-chromium";
 import { PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, USER_AGENT } from "./config";
 import { busyCheck, state } from "./state";
 import { urlCheck } from "./util";
 
-export const scrapeJs = async (url: string, waitMs: number) => {
-  let browser = undefined;
+export const scrapeJs = async (browser: Browser, url: string, waitMs: number) => {
 
   try {
-    browser = await chromium.launch({ executablePath: PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH });
     const context = await browser.newContext({ userAgent: USER_AGENT });
     const page = await context.newPage();
 
@@ -25,7 +23,7 @@ export const scrapeJs = async (url: string, waitMs: number) => {
     const html = await page.content();
     await page.close();
     await context.close();
-    await browser.close();
+    //await browser.close();
 
     return html;
   } catch (e) {
@@ -47,7 +45,7 @@ export const apiScrapeJs = async (req: Request, res: Response) => {
   try {
 
     state.setBusy();
-    const html = await scrapeJs(url, waitMs);
+    const html = await scrapeJs(state.browser(), url, waitMs);
     state.setNotBusy();
 
     res.send(html);

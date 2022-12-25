@@ -16,6 +16,10 @@ spec:
       env:
         - name: VPN_PROVIDER
           value: surfshark
+        - name: VPN_FILTER
+          value: "de,en,us,fr,es,gb,pl,be,at"
+        - name: VPN_PROTOCOL
+          value: openvpn
         - name: VPN_PROVIDER_USERNAME
           valueFrom:
             secretKeyRef:
